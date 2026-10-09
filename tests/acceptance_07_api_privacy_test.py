@@ -55,7 +55,7 @@ class ApiPrivacyAcceptance(unittest.TestCase):
         status, body = self.call("POST", "/admin/products/XX-0001/stock", {"delta": 1}, groups=["admin"])
         self.assertEqual(status, 400)  # missing idempotency key
         self.assertNotIn("Traceback", body)
-        status, _ = self.call("GET", "/public/products/KJ-9999")
+        status, _ = self.call("GET", "/public/products/KS-9999")
         self.assertEqual(status, 404)
 
     def test_draft_products_not_public(self):

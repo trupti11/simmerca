@@ -44,7 +44,7 @@ def make_ctx(**settings) -> Ctx:
 
 
 def seed(ctx: Ctx, stock: int = 3, made_to_order: bool = False, supplier_phone: str = "+919845012345",
-         status: str = "active", fabric: str = "Kanjivaram") -> tuple[dict, dict]:
+         status: str = "active", fabric: str = "Kanchi Silk") -> tuple[dict, dict]:
     """Create a supplier and one product with `stock` on hand. Returns (supplier, product)."""
     from simmerca import ledger, products, suppliers
 

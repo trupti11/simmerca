@@ -47,7 +47,7 @@ class DynamoStoreIntegration(unittest.TestCase):
         self.assertEqual(self.store.increment("C", "x"), 2)
 
     def test_stock_change_atomic_idempotent_and_floor(self):
-        bal = ("B", "KJ-0001")
+        bal = ("B", "KS-0001")
         ev = {"pk": "L", "sk": "1"}
         self.assertEqual(self.store.apply_stock_change(bal, 3, ("I", "k1"), [ev]), 3)
         with self.assertRaises(DuplicateRequest):

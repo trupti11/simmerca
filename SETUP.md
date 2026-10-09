@@ -89,9 +89,9 @@ Follow `frontend/LOVABLE_PROMPT.md` (env vars from step 6).
 
 ## 10. Smoke test (staging)
 - [ ] Admin login works; dashboard loads.
-- [ ] Create product (fabric Kanjivaram) → sku `KJ-0001`; upload a photo; "Analyse with AI" → appears in Review queue; approve.
+- [ ] Create product (fabric Kanchi Silk) → sku `KS-0001`; upload a photo; "Analyse with AI" → appears in Review queue; approve.
 - [ ] Set price, activate, link `aalora` → visible on storefront.
-- [ ] From a registered phone: `ADD KJ-0001 2` → confirm prompt → `YES` → "now has 2"; ledger shows it.
+- [ ] From a registered phone: `ADD KS-0001 2` → confirm prompt → `YES` → "now has 2"; ledger shows it.
 - [ ] Link `shopify` (sku must exist there) → Shopify inventory shows 2. Place a test order → stock 1, all channels updated.
 - [ ] `aws sqs get-queue-attributes` on the DLQs → 0 messages. Alerts screen empty.
 

@@ -34,14 +34,14 @@ class PricingAcceptance(unittest.TestCase):
 
     def test_04_suggestion_uses_comparables_and_is_clamped(self):
         for price in (40000, 50000, 60000):
-            pricing.add_comparable(self.ctx, {"fabric": "Kanjivaram", "price_cents": price, "currency": "USD"}, "t")
+            pricing.add_comparable(self.ctx, {"fabric": "Kanchi Silk", "price_cents": price, "currency": "USD"}, "t")
         s = pricing.suggest_price(self.ctx, self.sku)
         self.assertEqual(s["suggested_price_cents"], 50000)
         self.assertEqual(s["method"], "median_of_comparables")
-        pricing.add_comparable(self.ctx, {"fabric": "Kanjivaram", "price_cents": 1000, "currency": "USD"}, "t")
-        pricing.add_comparable(self.ctx, {"fabric": "Kanjivaram", "price_cents": 1000, "currency": "USD"}, "t")
-        pricing.add_comparable(self.ctx, {"fabric": "Kanjivaram", "price_cents": 1000, "currency": "USD"}, "t")
-        pricing.add_comparable(self.ctx, {"fabric": "Kanjivaram", "price_cents": 1000, "currency": "USD"}, "t")
+        pricing.add_comparable(self.ctx, {"fabric": "Kanchi Silk", "price_cents": 1000, "currency": "USD"}, "t")
+        pricing.add_comparable(self.ctx, {"fabric": "Kanchi Silk", "price_cents": 1000, "currency": "USD"}, "t")
+        pricing.add_comparable(self.ctx, {"fabric": "Kanchi Silk", "price_cents": 1000, "currency": "USD"}, "t")
+        pricing.add_comparable(self.ctx, {"fabric": "Kanchi Silk", "price_cents": 1000, "currency": "USD"}, "t")
         s = pricing.suggest_price(self.ctx, self.sku)
         self.assertGreaterEqual(s["suggested_price_cents"], s["floor_price_cents"])
 

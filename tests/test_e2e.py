@@ -13,7 +13,7 @@ from simmerca.api.router import App, handle
 
 class FakeVision:
     def describe(self, images, prompt):
-        return json.dumps({"fabric": {"value": "Kanjivaram", "confidence": 0.9},
+        return json.dumps({"fabric": {"value": "Kanchi Silk", "confidence": 0.9},
                            "primary_color": {"value": "red", "confidence": 0.9}})
 
 
@@ -46,10 +46,10 @@ class Journey(unittest.TestCase):
         # admin: supplier + product
         st, sup = self.call("POST", "/admin/suppliers", {"name": "Lakshmi", "phone": "+919845012345", "language": "hi"})
         self.assertEqual(st, 201)
-        st, p = self.call("POST", "/admin/products", {"fabric": "Kanjivaram", "supplier_id": sup["id"],
+        st, p = self.call("POST", "/admin/products", {"fabric": "Kanchi Silk", "supplier_id": sup["id"],
                                                       "cost_cents": 20000, "price_cents": 45000,
                                                       "story_public": "Woven over three weeks."})
-        self.assertEqual((st, p["sku"]), (201, "KJ-0001"))
+        self.assertEqual((st, p["sku"]), (201, "KS-0001"))
         sku = p["sku"]
 
         # image + AI proposal + human approval
@@ -126,7 +126,7 @@ class Journey(unittest.TestCase):
 
     def test_sync_worker_reports_only_failed_messages(self):
         self.app.adapters["meta"] = FakeAdapter("meta", fail=True)
-        st, p = self.call("POST", "/admin/products", {"fabric": "Tussar", "price_cents": 100, "status": "active"})
+        st, p = self.call("POST", "/admin/products", {"fabric": "Tussar Silk", "price_cents": 100, "status": "active"})
         self.call("PATCH", f"/admin/products/{p['sku']}", {"status": "active"})
         self.call("POST", f"/admin/products/{p['sku']}/listings", {"channel": "meta"})
         out = self.sync()

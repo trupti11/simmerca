@@ -1,26 +1,26 @@
-{"text": "ADD KJ-0114 2", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "add kj-114 3", "intent": "add", "sku": "KJ-0114", "qty": 3, "lang": "en"}
-{"text": "KJ-0114 add 1", "intent": "add", "sku": "KJ-0114", "qty": 1, "lang": "en"}
-{"text": "received 4 BN-0007", "intent": "add", "sku": "BN-0007", "qty": 4, "lang": "en"}
+{"text": "ADD KS-0114 2", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "add ks-114 3", "intent": "add", "sku": "KS-0114", "qty": 3, "lang": "en"}
+{"text": "KS-0114 add 1", "intent": "add", "sku": "KS-0114", "qty": 1, "lang": "en"}
+{"text": "received 4 MY-0007", "intent": "add", "sku": "MY-0007", "qty": 4, "lang": "en"}
 {"text": "+2 TS-0021", "intent": "add", "sku": "TS-0021", "qty": 2, "lang": "en"}
 {"text": "TS-21 +1", "intent": "add", "sku": "TS-0021", "qty": 1, "lang": "en"}
 {"text": "plus 5 CH-0003", "intent": "add", "sku": "CH-0003", "qty": 5, "lang": "en"}
 {"text": "new stock HC-0042 6", "intent": "add", "sku": "HC-0042", "qty": 6, "lang": "en"}
-{"text": "added 2 to KJ 0114", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "SOLD KJ-0114 1", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "en"}
-{"text": "kj-0114 sold 2", "intent": "sold", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "-1 BN-0007", "intent": "sold", "sku": "BN-0007", "qty": 1, "lang": "en"}
-{"text": "BN-7 -2", "intent": "sold", "sku": "BN-0007", "qty": 2, "lang": "en"}
+{"text": "added 2 to KS 0114", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "SOLD KS-0114 1", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "en"}
+{"text": "ks-0114 sold 2", "intent": "sold", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "-1 MY-0007", "intent": "sold", "sku": "MY-0007", "qty": 1, "lang": "en"}
+{"text": "MY-7 -2", "intent": "sold", "sku": "MY-0007", "qty": 2, "lang": "en"}
 {"text": "sale TS-0021 1", "intent": "sold", "sku": "TS-0021", "qty": 1, "lang": "en"}
-{"text": "sold one KJ-0114", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "en"}
-{"text": "KJ-0114 3 left", "intent": "set", "sku": "KJ-0114", "qty": 3, "lang": "en"}
+{"text": "sold one KS-0114", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "en"}
+{"text": "KS-0114 3 left", "intent": "set", "sku": "KS-0114", "qty": 3, "lang": "en"}
 {"text": "HC-0042 total 10", "intent": "set", "sku": "HC-0042", "qty": 10, "lang": "en"}
 {"text": "count CH-0003 0", "intent": "set", "sku": "CH-0003", "qty": 0, "lang": "en"}
-{"text": "remaining BN-0007 4", "intent": "set", "sku": "BN-0007", "qty": 4, "lang": "en"}
-{"text": "KJ-0114 stock is 2", "intent": "set", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "KJ-0114 ?", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "en"}
-{"text": "how many KJ-0114", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "en"}
-{"text": "check BN-0007", "intent": "query", "sku": "BN-0007", "qty": null, "lang": "en"}
+{"text": "remaining MY-0007 4", "intent": "set", "sku": "MY-0007", "qty": 4, "lang": "en"}
+{"text": "KS-0114 stock is 2", "intent": "set", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "KS-0114 ?", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "en"}
+{"text": "how many KS-0114", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "en"}
+{"text": "check MY-0007", "intent": "query", "sku": "MY-0007", "qty": null, "lang": "en"}
 {"text": "TS-0021", "intent": "query", "sku": "TS-0021", "qty": null, "lang": "en"}
 {"text": "status HC-0042", "intent": "query", "sku": "HC-0042", "qty": null, "lang": "en"}
 {"text": "CH-3?", "intent": "query", "sku": "CH-0003", "qty": null, "lang": "en"}
@@ -41,22 +41,22 @@
 {"text": "hi", "intent": "help", "sku": null, "qty": null, "lang": "en"}
 {"text": "hello", "intent": "help", "sku": null, "qty": null, "lang": "en"}
 {"text": "menu", "intent": "help", "sku": null, "qty": null, "lang": "en"}
-{"text": "KJ-0114 2", "intent": "unknown", "sku": "KJ-0114", "qty": 2, "lang": "en"}
+{"text": "KS-0114 2", "intent": "unknown", "sku": "KS-0114", "qty": 2, "lang": "en"}
 {"text": "what is the price", "intent": "unknown", "sku": null, "qty": null, "lang": "en"}
 {"text": "call me", "intent": "unknown", "sku": null, "qty": null, "lang": "en"}
 {"text": "12345", "intent": "unknown", "sku": null, "qty": null, "lang": "en"}
 {"text": "address change", "intent": "unknown", "sku": null, "qty": null, "lang": "en"}
-{"text": "KJ-0114 २ जोड़ें", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "hi"}
-{"text": "KJ-0114 में 3 जोड़ो", "intent": "add", "sku": "KJ-0114", "qty": 3, "lang": "hi"}
-{"text": "BN-0007 2 नए आए", "intent": "add", "sku": "BN-0007", "qty": 2, "lang": "hi"}
+{"text": "KS-0114 २ जोड़ें", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "hi"}
+{"text": "KS-0114 में 3 जोड़ो", "intent": "add", "sku": "KS-0114", "qty": 3, "lang": "hi"}
+{"text": "MY-0007 2 नए आए", "intent": "add", "sku": "MY-0007", "qty": 2, "lang": "hi"}
 {"text": "TS-0021 दो जोड़ें", "intent": "add", "sku": "TS-0021", "qty": 2, "lang": "hi"}
-{"text": "KJ-0114 1 बिका", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "hi"}
-{"text": "BN-0007 २ बिकी", "intent": "sold", "sku": "BN-0007", "qty": 2, "lang": "hi"}
-{"text": "KJ-0114 एक बेचा", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "hi"}
-{"text": "KJ-0114 3 बचे", "intent": "set", "sku": "KJ-0114", "qty": 3, "lang": "hi"}
+{"text": "KS-0114 1 बिका", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "hi"}
+{"text": "MY-0007 २ बिकी", "intent": "sold", "sku": "MY-0007", "qty": 2, "lang": "hi"}
+{"text": "KS-0114 एक बेचा", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "hi"}
+{"text": "KS-0114 3 बचे", "intent": "set", "sku": "KS-0114", "qty": 3, "lang": "hi"}
 {"text": "HC-0042 बाकी ५", "intent": "set", "sku": "HC-0042", "qty": 5, "lang": "hi"}
-{"text": "KJ-0114 कितने हैं", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "hi"}
-{"text": "BN-0007 कितना स्टॉक", "intent": "query", "sku": "BN-0007", "qty": null, "lang": "hi"}
+{"text": "KS-0114 कितने हैं", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "hi"}
+{"text": "MY-0007 कितना स्टॉक", "intent": "query", "sku": "MY-0007", "qty": null, "lang": "hi"}
 {"text": "हाँ", "intent": "confirm", "sku": null, "qty": null, "lang": "hi"}
 {"text": "हां", "intent": "confirm", "sku": null, "qty": null, "lang": "hi"}
 {"text": "जी", "intent": "confirm", "sku": null, "qty": null, "lang": "hi"}
@@ -65,62 +65,62 @@
 {"text": "nahi", "intent": "cancel", "sku": null, "qty": null, "lang": "hi"}
 {"text": "मदद", "intent": "help", "sku": null, "qty": null, "lang": "hi"}
 {"text": "नमस्ते", "intent": "help", "sku": null, "qty": null, "lang": "hi"}
-{"text": "KJ-0114 2 jodo", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "hi"}
-{"text": "KJ-0114 1 bika", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "hi"}
-{"text": "BN-0007 2 becha", "intent": "sold", "sku": "BN-0007", "qty": 2, "lang": "hi"}
-{"text": "KJ-0114 kitne bache", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "hi"}
-{"text": "KJ-0114 २ जोडा", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "mr"}
-{"text": "KJ-0114 1 विकली", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "mr"}
-{"text": "BN-0007 3 विकले", "intent": "sold", "sku": "BN-0007", "qty": 3, "lang": "mr"}
-{"text": "KJ-0114 शिल्लक 2", "intent": "set", "sku": "KJ-0114", "qty": 2, "lang": "mr"}
-{"text": "KJ-0114 किती", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "mr"}
+{"text": "KS-0114 2 jodo", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "hi"}
+{"text": "KS-0114 1 bika", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "hi"}
+{"text": "MY-0007 2 becha", "intent": "sold", "sku": "MY-0007", "qty": 2, "lang": "hi"}
+{"text": "KS-0114 kitne bache", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "hi"}
+{"text": "KS-0114 २ जोडा", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "mr"}
+{"text": "KS-0114 1 विकली", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "mr"}
+{"text": "MY-0007 3 विकले", "intent": "sold", "sku": "MY-0007", "qty": 3, "lang": "mr"}
+{"text": "KS-0114 शिल्लक 2", "intent": "set", "sku": "KS-0114", "qty": 2, "lang": "mr"}
+{"text": "KS-0114 किती", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "mr"}
 {"text": "होय", "intent": "confirm", "sku": null, "qty": null, "lang": "mr"}
 {"text": "नाही", "intent": "cancel", "sku": null, "qty": null, "lang": "mr"}
-{"text": "KJ-0114 ২ যোগ", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "bn"}
-{"text": "BN-0007 ১ বিক্রি", "intent": "sold", "sku": "BN-0007", "qty": 1, "lang": "bn"}
+{"text": "KS-0114 ২ যোগ", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "bn"}
+{"text": "MY-0007 ১ বিক্রি", "intent": "sold", "sku": "MY-0007", "qty": 1, "lang": "bn"}
 {"text": "TS-0021 ৩ বিক্রি হয়েছে", "intent": "sold", "sku": "TS-0021", "qty": 3, "lang": "bn"}
-{"text": "KJ-0114 বাকি ২", "intent": "set", "sku": "KJ-0114", "qty": 2, "lang": "bn"}
-{"text": "KJ-0114 কত", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "bn"}
+{"text": "KS-0114 বাকি ২", "intent": "set", "sku": "KS-0114", "qty": 2, "lang": "bn"}
+{"text": "KS-0114 কত", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "bn"}
 {"text": "হ্যাঁ", "intent": "confirm", "sku": null, "qty": null, "lang": "bn"}
 {"text": "না", "intent": "cancel", "sku": null, "qty": null, "lang": "bn"}
 {"text": "TS-0021 ২ বিক্ৰী", "intent": "sold", "sku": "TS-0021", "qty": 2, "lang": "as"}
 {"text": "TS-0021 কিমান", "intent": "query", "sku": "TS-0021", "qty": null, "lang": "as"}
 {"text": "হয়", "intent": "confirm", "sku": null, "qty": null, "lang": "as"}
-{"text": "KJ-0114 ૨ ઉમેરો", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "gu"}
-{"text": "BN-0007 ૧ વેચાયું", "intent": "sold", "sku": "BN-0007", "qty": 1, "lang": "gu"}
-{"text": "KJ-0114 બાકી ૩", "intent": "set", "sku": "KJ-0114", "qty": 3, "lang": "gu"}
-{"text": "KJ-0114 કેટલા", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "gu"}
+{"text": "KS-0114 ૨ ઉમેરો", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "gu"}
+{"text": "MY-0007 ૧ વેચાયું", "intent": "sold", "sku": "MY-0007", "qty": 1, "lang": "gu"}
+{"text": "KS-0114 બાકી ૩", "intent": "set", "sku": "KS-0114", "qty": 3, "lang": "gu"}
+{"text": "KS-0114 કેટલા", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "gu"}
 {"text": "હા", "intent": "confirm", "sku": null, "qty": null, "lang": "gu"}
 {"text": "ના", "intent": "cancel", "sku": null, "qty": null, "lang": "gu"}
-{"text": "KJ-0114 2 சேர்", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "ta"}
-{"text": "KJ-0114 ௨ சேர்க்க", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "ta"}
-{"text": "KJ-0114 1 விற்பனை", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "ta"}
-{"text": "BN-0007 2 விற்றது", "intent": "sold", "sku": "BN-0007", "qty": 2, "lang": "ta"}
-{"text": "KJ-0114 மீதம் 4", "intent": "set", "sku": "KJ-0114", "qty": 4, "lang": "ta"}
-{"text": "KJ-0114 எத்தனை", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "ta"}
+{"text": "KS-0114 2 சேர்", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "ta"}
+{"text": "KS-0114 ௨ சேர்க்க", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "ta"}
+{"text": "KS-0114 1 விற்பனை", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "ta"}
+{"text": "MY-0007 2 விற்றது", "intent": "sold", "sku": "MY-0007", "qty": 2, "lang": "ta"}
+{"text": "KS-0114 மீதம் 4", "intent": "set", "sku": "KS-0114", "qty": 4, "lang": "ta"}
+{"text": "KS-0114 எத்தனை", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "ta"}
 {"text": "ஆம்", "intent": "confirm", "sku": null, "qty": null, "lang": "ta"}
 {"text": "சரி", "intent": "confirm", "sku": null, "qty": null, "lang": "ta"}
 {"text": "இல்லை", "intent": "cancel", "sku": null, "qty": null, "lang": "ta"}
-{"text": "KJ-0114 2 జోడించు", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "te"}
-{"text": "KJ-0114 1 అమ్మింది", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "te"}
-{"text": "KJ-0114 మిగిలాయి 3", "intent": "set", "sku": "KJ-0114", "qty": 3, "lang": "te"}
-{"text": "KJ-0114 ఎన్ని", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "te"}
+{"text": "KS-0114 2 జోడించు", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "te"}
+{"text": "KS-0114 1 అమ్మింది", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "te"}
+{"text": "KS-0114 మిగిలాయి 3", "intent": "set", "sku": "KS-0114", "qty": 3, "lang": "te"}
+{"text": "KS-0114 ఎన్ని", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "te"}
 {"text": "అవును", "intent": "confirm", "sku": null, "qty": null, "lang": "te"}
 {"text": "వద్దు", "intent": "cancel", "sku": null, "qty": null, "lang": "te"}
-{"text": "KJ-0114 ೨ ಸೇರಿಸಿ", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "kn"}
-{"text": "KJ-0114 1 ಮಾರಾಟ", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "kn"}
-{"text": "KJ-0114 ಉಳಿದಿದೆ 2", "intent": "set", "sku": "KJ-0114", "qty": 2, "lang": "kn"}
-{"text": "KJ-0114 ಎಷ್ಟು", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "kn"}
+{"text": "KS-0114 ೨ ಸೇರಿಸಿ", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "kn"}
+{"text": "KS-0114 1 ಮಾರಾಟ", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "kn"}
+{"text": "KS-0114 ಉಳಿದಿದೆ 2", "intent": "set", "sku": "KS-0114", "qty": 2, "lang": "kn"}
+{"text": "KS-0114 ಎಷ್ಟು", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "kn"}
 {"text": "ಹೌದು", "intent": "confirm", "sku": null, "qty": null, "lang": "kn"}
 {"text": "ಇಲ್ಲ", "intent": "cancel", "sku": null, "qty": null, "lang": "kn"}
-{"text": "KJ-0114 ୨ ଯୋଗ", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "or"}
-{"text": "KJ-0114 1 ବିକ୍ରି", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "or"}
-{"text": "KJ-0114 ବାକି 3", "intent": "set", "sku": "KJ-0114", "qty": 3, "lang": "or"}
-{"text": "KJ-0114 କେତେ", "intent": "query", "sku": "KJ-0114", "qty": null, "lang": "or"}
+{"text": "KS-0114 ୨ ଯୋଗ", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "or"}
+{"text": "KS-0114 1 ବିକ୍ରି", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "or"}
+{"text": "KS-0114 ବାକି 3", "intent": "set", "sku": "KS-0114", "qty": 3, "lang": "or"}
+{"text": "KS-0114 କେତେ", "intent": "query", "sku": "KS-0114", "qty": null, "lang": "or"}
 {"text": "ହଁ", "intent": "confirm", "sku": null, "qty": null, "lang": "or"}
 {"text": "ନା", "intent": "cancel", "sku": null, "qty": null, "lang": "or"}
-{"text": "  add   KJ-0114   2  ", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "Add KJ0114 2 pcs", "intent": "add", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "kj_0114 sold 1", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "en"}
-{"text": "KJ-0114: 2 sold today", "intent": "sold", "sku": "KJ-0114", "qty": 2, "lang": "en"}
-{"text": "SOLD KJ-0114 x1", "intent": "sold", "sku": "KJ-0114", "qty": 1, "lang": "en"}
+{"text": "  add   KS-0114   2  ", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "Add KS0114 2 pcs", "intent": "add", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "ks_0114 sold 1", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "en"}
+{"text": "KS-0114: 2 sold today", "intent": "sold", "sku": "KS-0114", "qty": 2, "lang": "en"}
+{"text": "SOLD KS-0114 x1", "intent": "sold", "sku": "KS-0114", "qty": 1, "lang": "en"}

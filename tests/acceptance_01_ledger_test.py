@@ -64,9 +64,9 @@ class LedgerAcceptance(unittest.TestCase):
         self.assertEqual(jobs, [{"type": "push_stock", "tenant": "aalora", "sku": self.sku}])
 
     def test_07_short_code_sku_from_fabric(self):
-        self.assertRegex(self.sku, r"^KJ-\d{4}$")
-        p2 = products.create_product(self.ctx, {"fabric": "Banarasi"}, "t")
-        self.assertRegex(p2["sku"], r"^BN-0001$")
+        self.assertRegex(self.sku, r"^KS-\d{4}$")
+        p2 = products.create_product(self.ctx, {"fabric": "Mysore Silk"}, "t")
+        self.assertRegex(p2["sku"], r"^MY-0001$")
 
     def test_08_sign_rules_enforced(self):
         with self.assertRaises(ValidationError):

@@ -15,7 +15,7 @@ components:
   securitySchemes:
     cognito: { type: http, scheme: bearer, bearerFormat: JWT }
   parameters:
-    sku: { name: sku, in: path, required: true, schema: { type: string, example: KJ-0001 } }
+    sku: { name: sku, in: path, required: true, schema: { type: string, example: KS-0001 } }
   responses:
     Error:
       description: Error
@@ -35,6 +35,7 @@ components:
       properties:
         fabric: { type: string }
         weave: { type: string }
+        surface: { type: string, description: "print, dye, paint or embroidery applied after weaving" }
         primary_color: { type: string }
         secondary_colors: { type: array, items: { type: string } }
         motif: { type: string }

@@ -42,7 +42,7 @@ class IntelligenceAcceptance(unittest.TestCase):
     def test_01_02_proposes_normalized_values_with_confidence(self):
         p = propose_attributes(self.ctx, self.sku, FakeModel(GOOD))
         prop = p["proposed_attributes"]
-        self.assertEqual(prop["fabric"], {"value": "Kanjivaram", "confidence": 0.92})
+        self.assertEqual(prop["fabric"], {"value": "Kanchi Silk", "confidence": 0.92})
         self.assertEqual(prop["primary_color"]["value"], "red")
         self.assertEqual(prop["secondary_colors"]["value"], ["gold", "green"])
         self.assertIs(prop["zari"]["value"], True)
@@ -79,7 +79,7 @@ class IntelligenceAcceptance(unittest.TestCase):
         self.assertEqual(p["attribute_status"], "approved")
         public = public_product(self.ctx, p)["attributes"]
         self.assertEqual(public["motif"], "peacock")
-        self.assertEqual(public["fabric"], "Kanjivaram")
+        self.assertEqual(public["fabric"], "Kanchi Silk")
         with self.assertRaises(Exception):
             approve_attributes(self.ctx, self.sku, "admin:t")  # nothing pending now
 

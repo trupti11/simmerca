@@ -84,9 +84,8 @@ class Parsed:
 
 
 class LlmFallback(Protocol):
-    def complete_json(self, system: str, user: str) -> str: ...
-
-
+    def complete_json(self, system: str, user: str) -> str:
+        ...
 def _clean(text: str) -> str:
     text = unicodedata.normalize("NFC", text or "").strip()
     return re.sub(r"\s+", " ", text)
@@ -166,7 +165,7 @@ def parse_rules(text: str, has_media: bool = False) -> Parsed:
 
 LLM_SYSTEM = """You classify WhatsApp messages from handloom weavers managing inventory.
 Messages may be in English, Hindi, Marathi, Bengali, Gujarati, Tamil, Telugu, Odia, Assamese or Kannada,
-in native script or romanized. Product codes look like KJ-0114 (two letters, dash, digits).
+in native script or romanized. Product codes look like KS-0114 (two letters, dash, digits).
 Return ONLY a JSON object: {"intent": one of ["add","sold","set","query","help","unknown"],
 "sku": "XX-0000" or null, "qty": integer or null, "confidence": number 0..1}.
 "add" = new pieces arrived; "sold" = pieces sold; "set" = the total count now; "query" = asking stock.

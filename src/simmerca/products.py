@@ -8,7 +8,7 @@ from .errors import NotFound, ValidationError
 from .vocab import FABRIC_PROFILES, sku_prefix
 
 STATUSES = {"draft", "active", "archived"}
-ATTRIBUTE_FIELDS = ("fabric", "weave", "primary_color", "secondary_colors", "motif", "border", "zari")
+ATTRIBUTE_FIELDS = ("fabric", "weave", "surface", "primary_color", "secondary_colors", "motif", "border", "zari")
 
 # Fields an admin may PATCH directly. Price is NOT here once active: use price proposals (spec 05).
 PATCHABLE = {

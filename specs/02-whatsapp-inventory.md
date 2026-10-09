@@ -4,7 +4,7 @@
 Weavers manage stock from a phone, in their own language, without an app.
 
 ## Example
-Weaver sends `ADD KJ-0114 2` (or `KJ-0114 २ जोड़ें`). Reply: "Add 2 to KJ-0114 (Kanjivaram, red)? Reply YES or NO." Weaver sends `हाँ`. Reply: "Done. KJ-0114 now has 3."
+Weaver sends `ADD KS-0114 2` (or `KS-0114 २ जोड़ें`). Reply: "Add 2 to KS-0114 (Kanchi Silk, red)? Reply YES or NO." Weaver sends `हाँ`. Reply: "Done. KS-0114 now has 3."
 
 ## Acceptance criteria
 1. Security, in this order, before any side effect: secret path token (constant-time compare) → Twilio `X-Twilio-Signature` HMAC-SHA1 validation → MessageSid dedup → sender allowlist (phone must belong to an active supplier).

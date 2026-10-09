@@ -6,8 +6,8 @@ from __future__ import annotations
 TEMPLATES: dict[str, dict[str, str]] = {
     "en": {
         "not_registered": "This number is not registered with Aalora. Please contact the Aalora team.",
-        "help": "Send:\nADD KJ-0114 2 (new pieces)\nSOLD KJ-0114 1 (sold)\nKJ-0114 3 left (correct count)\nKJ-0114 ? (check stock)\nor a photo to add a new piece.",
-        "unknown": "Sorry, I did not understand. Example: ADD KJ-0114 2. Send HELP for options.",
+        "help": "Send:\nADD KS-0114 2 (new pieces)\nSOLD KS-0114 1 (sold)\nKS-0114 3 left (correct count)\nKS-0114 ? (check stock)\nor a photo to add a new piece.",
+        "unknown": "Sorry, I did not understand. Example: ADD KS-0114 2. Send HELP for options.",
         "ask_qty": "How many for {sku}? Example: ADD {sku} 2",
         "not_found": "{sku} was not found.{suggest}",
         "suggest": " Your codes: {codes}",
@@ -27,8 +27,8 @@ TEMPLATES: dict[str, dict[str, str]] = {
     },
     "hi": {
         "not_registered": "यह नंबर Aalora के साथ पंजीकृत नहीं है। कृपया Aalora टीम से संपर्क करें।",
-        "help": "भेजें:\nADD KJ-0114 2 (नए पीस)\nSOLD KJ-0114 1 (बिके)\nKJ-0114 3 बचे (सही गिनती)\nKJ-0114 ? (स्टॉक देखें)\nया नए पीस की फोटो।",
-        "unknown": "माफ़ कीजिए, समझ नहीं आया। उदाहरण: ADD KJ-0114 2। विकल्पों के लिए HELP भेजें।",
+        "help": "भेजें:\nADD KS-0114 2 (नए पीस)\nSOLD KS-0114 1 (बिके)\nKS-0114 3 बचे (सही गिनती)\nKS-0114 ? (स्टॉक देखें)\nया नए पीस की फोटो।",
+        "unknown": "माफ़ कीजिए, समझ नहीं आया। उदाहरण: ADD KS-0114 2। विकल्पों के लिए HELP भेजें।",
         "ask_qty": "{sku} के कितने? उदाहरण: ADD {sku} 2",
         "not_found": "{sku} नहीं मिला।{suggest}",
         "suggest": " आपके कोड: {codes}",

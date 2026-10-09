@@ -45,17 +45,17 @@ class TwilioSignature(unittest.TestCase):
 class Parser(unittest.TestCase):
     def test_examples(self):
         cases = {
-            "ADD KJ-114 2": ("add", "KJ-0114", 2),
-            "kj 114 sold 1": ("sold", "KJ-0114", 1),
-            "+3 BN-0007": ("add", "BN-0007", 3),
+            "ADD KS-114 2": ("add", "KS-0114", 2),
+            "ks 114 sold 1": ("sold", "KS-0114", 1),
+            "+3 MY-0007": ("add", "MY-0007", 3),
             "TS-0002 -1": ("sold", "TS-0002", 1),
-            "KJ-0114 3 left": ("set", "KJ-0114", 3),
-            "KJ-0114 ?": ("query", "KJ-0114", None),
-            "KJ-0114 kitne hai": ("query", "KJ-0114", None),
-            "KJ-0114 दो बिकी": ("sold", "KJ-0114", 2),
-            "KJ-0114 ৩ বিক্রি": ("sold", "KJ-0114", 3),
-            "KJ-0114 ௨ சேர்": ("add", "KJ-0114", 2),
-            "KJ-0114 5": ("unknown", "KJ-0114", 5),
+            "KS-0114 3 left": ("set", "KS-0114", 3),
+            "KS-0114 ?": ("query", "KS-0114", None),
+            "KS-0114 kitne hai": ("query", "KS-0114", None),
+            "KS-0114 दो बिकी": ("sold", "KS-0114", 2),
+            "KS-0114 ৩ বিক্রি": ("sold", "KS-0114", 3),
+            "KS-0114 ௨ சேர்": ("add", "KS-0114", 2),
+            "KS-0114 5": ("unknown", "KS-0114", 5),
         }
         for text, (intent, sku, qty) in cases.items():
             p = parse_rules(text)
@@ -81,14 +81,14 @@ class Parser(unittest.TestCase):
             def complete_json(self, system, user):
                 return self.out
 
-        good = Llm('{"intent":"add","sku":"kj-114","qty":2,"confidence":0.9}')
-        p = parse("teen naye aaye hain kanjivaram wale kj114 me, do", llm=good)
+        good = Llm('{"intent":"add","sku":"ks-114","qty":2,"confidence":0.9}')
+        p = parse("teen naye aaye hain kanjivaram wale ks114 me, do", llm=good)
         self.assertIn(p.intent, {"add", "unknown"})
-        self.assertEqual(parse("random words", llm=Llm('{"intent":"add","sku":"KJ-0001","qty":2,"confidence":0.95}')).source,
+        self.assertEqual(parse("random words", llm=Llm('{"intent":"add","sku":"KS-0001","qty":2,"confidence":0.95}')).source,
                          "llm")
         self.assertEqual(parse("random words", llm=Llm("garbage")).intent, "unknown")
         self.assertEqual(parse("random words", llm=Llm('{"intent":"delete_all"}')).intent, "unknown")
-        self.assertEqual(parse("random words", llm=Llm('{"intent":"add","sku":"KJ-1","qty":2,"confidence":0.4}')).intent,
+        self.assertEqual(parse("random words", llm=Llm('{"intent":"add","sku":"KS-1","qty":2,"confidence":0.4}')).intent,
                          "unknown")
 
         class Boom:
@@ -98,13 +98,13 @@ class Parser(unittest.TestCase):
         self.assertEqual(parse("random words", llm=Boom()).intent, "unknown")
 
     def test_validate_llm_rejects_bad_qty(self):
-        self.assertEqual(validate_llm_output('{"intent":"add","sku":"KJ-1","qty":-5,"confidence":1}').intent, "unknown")
-        self.assertEqual(validate_llm_output('{"intent":"add","sku":"KJ-1","qty":true,"confidence":1}').intent, "unknown")
+        self.assertEqual(validate_llm_output('{"intent":"add","sku":"KS-1","qty":-5,"confidence":1}').intent, "unknown")
+        self.assertEqual(validate_llm_output('{"intent":"add","sku":"KS-1","qty":true,"confidence":1}').intent, "unknown")
 
 
 class Vocab(unittest.TestCase):
     def test_normalize(self):
-        self.assertEqual(normalize_fabric("Kanchipuram Silk"), "Kanjivaram")
+        self.assertEqual(normalize_fabric("Kanchipuram Silk"), "Kanchi Silk")
         self.assertEqual(normalize_fabric("pure sico saree"), "Silk Cotton")
         self.assertIsNone(normalize_fabric("polyester"))
         self.assertEqual(normalize_color("Rani Pink"), "magenta")
@@ -131,29 +131,29 @@ class Http(unittest.TestCase):
             c.request("GET", "https://x.test/a?token=secret")
 
 
-LISTING = {"sku": "KJ-0001"}
+LISTING = {"sku": "KS-0001"}
 
 
 class Shopify(unittest.TestCase):
     def test_discover_and_push(self):
         c, t = client([
             (200, {"data": {"productVariants": {"nodes": [
-                {"id": "gid://shopify/ProductVariant/1", "sku": "KJ-0001", "product": {"id": "gid://shopify/Product/9"},
+                {"id": "gid://shopify/ProductVariant/1", "sku": "KS-0001", "product": {"id": "gid://shopify/Product/9"},
                  "inventoryItem": {"id": "gid://shopify/InventoryItem/5"}}]}}}),
             (200, {"data": {"inventorySetQuantities": {"userErrors": []}}}),
             (200, {"data": {"productVariantsBulkUpdate": {"userErrors": []}}}),
         ])
         s = ShopifyChannel("aalora.myshopify.com", "tok", "gid://shopify/Location/1", c)
-        ext = s.discover_listing("KJ-0001")
+        ext = s.discover_listing("KS-0001")
         self.assertEqual(ext["inventory_item_id"], "gid://shopify/InventoryItem/5")
-        s.push_inventory({"sku": "KJ-0001", "external": ext}, 3)
+        s.push_inventory({"sku": "KS-0001", "external": ext}, 3)
         inp = t.requests[1]["body"]["variables"]["input"]
         self.assertEqual(inp["quantities"][0], {"inventoryItemId": "gid://shopify/InventoryItem/5",
                                                 "locationId": "gid://shopify/Location/1", "quantity": 3,
                                                 "changeFromQuantity": None})
         self.assertNotIn("ignoreCompareQuantity", inp)
         self.assertEqual(t.requests[1]["headers"]["X-Shopify-Access-Token"], "tok")
-        s.push_price({"sku": "KJ-0001", "external": ext}, 45000, "USD")
+        s.push_price({"sku": "KS-0001", "external": ext}, 45000, "USD")
         self.assertEqual(t.requests[2]["body"]["variables"]["variants"][0]["price"], "450.00")
 
     def test_older_api_version_uses_ignore_compare(self):
@@ -171,14 +171,14 @@ class Shopify(unittest.TestCase):
             s.push_inventory({"sku": "X", "external": {"inventory_item_id": "I"}}, 1)
 
     def test_parse_webhook(self):
-        o = parse_order_webhook({"id": 1, "line_items": [{"id": 2, "sku": "KJ-0001", "quantity": 2},
+        o = parse_order_webhook({"id": 1, "line_items": [{"id": 2, "sku": "KS-0001", "quantity": 2},
                                                          {"id": 3, "sku": "", "quantity": 1}]})
-        self.assertEqual([(ln.sku, ln.qty) for ln in o.lines], [("KJ-0001", 2), (None, 1)])
+        self.assertEqual([(ln.sku, ln.qty) for ln in o.lines], [("KS-0001", 2), (None, 1)])
 
 
 ETSY_INV = {
     "products": [{
-        "product_id": 1, "sku": "KJ-0001", "is_deleted": False, "property_values": [],
+        "product_id": 1, "sku": "KS-0001", "is_deleted": False, "property_values": [],
         "offerings": [{"offering_id": 7, "price": {"amount": 45000, "divisor": 100, "currency_code": "USD"},
                        "quantity": 2, "is_enabled": True, "is_deleted": False}],
     }],
@@ -195,7 +195,7 @@ class Etsy(unittest.TestCase):
 
     def test_push_inventory_put_body_and_token_rotation(self):
         e, t, saved = self.make([(200, ETSY_INV), (200, {})])
-        e.push_inventory({"sku": "KJ-0001", "external": {"listing_id": "55"}}, 4)
+        e.push_inventory({"sku": "KS-0001", "external": {"listing_id": "55"}}, 4)
         put = t.requests[2]
         self.assertEqual(put["method"], "PUT")
         offering = put["body"]["products"][0]["offerings"][0]
@@ -208,7 +208,7 @@ class Etsy(unittest.TestCase):
         inv = json.loads(json.dumps(ETSY_INV))
         inv["products"][0]["offerings"][0]["readiness_state_id"] = 123
         e, t, _ = self.make([(200, inv), (200, {})])
-        e.push_inventory({"sku": "KJ-0001", "external": {"listing_id": "55"}}, 1)
+        e.push_inventory({"sku": "KS-0001", "external": {"listing_id": "55"}}, 1)
         self.assertEqual(t.requests[2]["body"]["products"][0]["offerings"][0]["readiness_state_id"], 123)
 
     def test_token_reload_after_rotation_elsewhere(self):
@@ -220,21 +220,21 @@ class Etsy(unittest.TestCase):
 
     def test_zero_deactivates_listing(self):
         e, t, _ = self.make([(200, ETSY_INV), (200, {})])
-        e.push_inventory({"sku": "KJ-0001", "external": {"listing_id": "55"}}, 0)
+        e.push_inventory({"sku": "KS-0001", "external": {"listing_id": "55"}}, 0)
         self.assertEqual(t.requests[2]["method"], "PATCH")
 
     def test_missing_sku_raises(self):
         e, _, _ = self.make([(200, ETSY_INV)])
         with self.assertRaises(ChannelError):
-            e.push_inventory({"sku": "KJ-0002", "external": {"listing_id": "55"}}, 1)
+            e.push_inventory({"sku": "KS-0002", "external": {"listing_id": "55"}}, 1)
 
     def test_fetch_orders(self):
         e, _, _ = self.make([(200, {"count": 1, "results": [{
             "receipt_id": 9, "create_timestamp": 1790000000,
-            "transactions": [{"transaction_id": 11, "sku": "KJ-0001", "quantity": 1}]}]})])
+            "transactions": [{"transaction_id": 11, "sku": "KS-0001", "quantity": 1}]}]})])
         orders, cursor = e.fetch_orders("2026-10-06T00:00:00Z")
         self.assertEqual(orders[0].order_id, "9")
-        self.assertEqual(orders[0].lines[0].sku, "KJ-0001")
+        self.assertEqual(orders[0].lines[0].sku, "KS-0001")
         self.assertTrue(cursor.endswith("Z"))
 
 
@@ -248,7 +248,7 @@ class LedgerRaces(unittest.TestCase):
 
         ctx = make_ctx()
         _, a = seed(ctx, stock=5)
-        _, b = seed(ctx, stock=5, fabric="Banarasi")
+        _, b = seed(ctx, stock=5, fabric="Mysore Silk")
         b2b.upsert_buyer_profile(ctx, "u", {"company": "X"})
         b2b.set_buyer_status(ctx, "u", "approved", "t")
         q = b2b.create_quote(ctx, "u", [{"sku": a["sku"], "qty": 2}, {"sku": b["sku"], "qty": 2}])
@@ -298,18 +298,18 @@ class Meta(unittest.TestCase):
     def test_items_batch(self):
         c, t = client([(200, {"handles": ["h"]}), (200, {"handles": ["h"]})])
         m = MetaCatalogChannel("CAT", "TOK", c)
-        m.push_inventory({"sku": "KJ-0001", "external": {"retailer_id": "KJ-0001"}}, 0)
+        m.push_inventory({"sku": "KS-0001", "external": {"retailer_id": "KS-0001"}}, 0)
         data = t.requests[0]["body"]["requests"][0]["data"]
-        self.assertEqual(data, {"id": "KJ-0001", "inventory": 0, "availability": "out of stock"})
-        m.push_price({"sku": "KJ-0001", "external": {"retailer_id": "KJ-0001"}}, 45000, "USD")
+        self.assertEqual(data, {"id": "KS-0001", "inventory": 0, "availability": "out of stock"})
+        m.push_price({"sku": "KS-0001", "external": {"retailer_id": "KS-0001"}}, 45000, "USD")
         self.assertEqual(t.requests[1]["body"]["requests"][0]["data"]["price"], "450.00 USD")
 
     def test_item_level_errors_raise(self):
         c, _ = client([(200, {"handles": ["h"], "validation_status": [
-            {"retailer_id": "KJ-0001", "errors": [{"message": "item not found"}]}]})])
+            {"retailer_id": "KS-0001", "errors": [{"message": "item not found"}]}]})])
         m = MetaCatalogChannel("CAT", "TOK", c)
         with self.assertRaises(ChannelError):
-            m.push_inventory({"sku": "KJ-0001", "external": {"retailer_id": "KJ-0001"}}, 1)
+            m.push_inventory({"sku": "KS-0001", "external": {"retailer_id": "KS-0001"}}, 1)
 
 
 if __name__ == "__main__":

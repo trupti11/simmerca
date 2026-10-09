@@ -9,7 +9,7 @@ from .context import Ctx
 from .pricing import tier_table
 from .products import availability
 
-PUBLIC_ATTRIBUTE_FIELDS = ("fabric", "weave", "primary_color", "secondary_colors", "motif", "border", "zari")
+PUBLIC_ATTRIBUTE_FIELDS = ("fabric", "weave", "surface", "primary_color", "secondary_colors", "motif", "border", "zari")
 
 
 def _attributes(product: dict) -> dict:

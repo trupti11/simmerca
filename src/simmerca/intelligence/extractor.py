@@ -12,11 +12,22 @@ from typing import Callable, Protocol
 from ..context import Ctx
 from ..errors import Conflict, ValidationError
 from ..products import get_product, list_products
-from ..vocab import BORDERS, COLORS, FABRIC_PROFILES, MOTIFS, WEAVES, normalize_color, normalize_fabric
+from ..vocab import (
+    BORDERS,
+    COLORS,
+    FABRIC_PROFILES,
+    MOTIFS,
+    SURFACES,
+    WEAVES,
+    normalize_color,
+    normalize_fabric,
+    normalize_term,
+)
 
 log = logging.getLogger(__name__)
 REVIEW_THRESHOLD = 0.80
-FIELDS = ("fabric", "weave", "primary_color", "secondary_colors", "motif", "border", "zari")
+FIELDS = ("fabric", "weave", "surface", "primary_color", "secondary_colors", "motif", "border", "zari")
+TERM_AXES = ("weave", "surface", "motif", "border")
 
 
 class VisionModel(Protocol):
@@ -30,6 +41,7 @@ Look at the photo(s) and return ONLY one JSON object, no prose:
 {{
  "fabric": {{"value": one of {sorted(FABRIC_PROFILES)} or null, "confidence": 0..1}},
  "weave": {{"value": one of {sorted(WEAVES)}, "confidence": 0..1}},
+ "surface": {{"value": one of {sorted(SURFACES)}, "confidence": 0..1}},
  "primary_color": {{"value": one of {sorted(COLORS)}, "confidence": 0..1}},
  "secondary_colors": {{"value": [colors from the same list], "confidence": 0..1}},
  "motif": {{"value": one of {sorted(MOTIFS)}, "confidence": 0..1}},
@@ -37,7 +49,8 @@ Look at the photo(s) and return ONLY one JSON object, no prose:
  "zari": {{"value": true or false, "confidence": 0..1}}
 }}
 Confidence must reflect real uncertainty. Fabric is hard to judge from photos: if unsure, say so with low
-confidence rather than guessing. Never invent a value outside the lists."""
+confidence rather than guessing. "weave" is how the cloth is woven; "surface" is anything applied after
+weaving (print, dye, paint, embroidery). Never invent a value outside the lists."""
 
 
 def _field(value, confidence) -> dict:
@@ -71,10 +84,9 @@ def normalize_output(raw: str) -> dict:
     v, c = get("fabric")
     out["fabric"] = _field(normalize_fabric(v) if isinstance(v, str) else None, c)
 
-    for name, vocab in (("weave", WEAVES), ("motif", MOTIFS), ("border", BORDERS)):
-        v, c = get(name)
-        val = str(v).strip().lower() if isinstance(v, str) else None
-        out[name] = _field(val if val in vocab else None, c)
+    for axis in TERM_AXES:
+        v, c = get(axis)
+        out[axis] = _field(normalize_term(axis, v) if isinstance(v, str) else None, c)
 
     v, c = get("primary_color")
     out["primary_color"] = _field(normalize_color(v) if isinstance(v, str) else None, c)
@@ -164,10 +176,11 @@ def _validate_edit(field: str, value):
         if not isinstance(value, bool):
             raise ValidationError("zari must be true or false")
         return value
-    vocab = {"weave": WEAVES, "motif": MOTIFS, "border": BORDERS}[field]
-    if str(value).lower() not in vocab:
+    norm = normalize_term(field, value)
+    if norm is None:
+        vocab = {"weave": WEAVES, "surface": SURFACES, "motif": MOTIFS, "border": BORDERS}[field]
         raise ValidationError(f"{field} must be one of {sorted(vocab)}")
-    return str(value).lower()
+    return norm
 
 
 def review_queue(ctx: Ctx) -> list[dict]:

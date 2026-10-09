@@ -4,8 +4,8 @@
 Listing a handloom saree needs accurate attributes (fabric, weave, colors, motif, border, zari). Typing them is slow and error-prone.
 
 ## Acceptance criteria
-1. Input: one or more product photos (S3 keys). Output: `proposed_attributes` with a value and confidence (0–1) per field: fabric, weave, primary_color, secondary_colors, motif, border, zari.
-2. Fabric is normalized to one of the 15 fabric profiles or `null`. Synonyms map (e.g. "Kanchipuram silk" → "Kanjivaram").
+1. Input: one or more product photos (S3 keys). Output: `proposed_attributes` with a value and confidence (0–1) per field: fabric, weave, surface (print/dye/paint/embroidery), primary_color, secondary_colors, motif, border, zari.
+2. Fabric is normalized to one of the fabric profiles in `vocab.py` or `null`. Synonyms map (e.g. "Kanchipuram silk" → "Kanchi Silk").
 3. Model output is parsed and validated; invalid JSON or out-of-vocabulary values become `null` with confidence 0, never an exception that loses the job.
 4. Proposals never auto-approve. `attribute_status` is `pending_review` until an admin approves (optionally with edits).
 5. Any field with confidence < 0.80 is listed in `needs_review_fields`, and the product sorts first in the review queue.
