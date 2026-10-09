@@ -1,0 +1,478 @@
+openapi: 3.0.3
+info:
+  title: Simmerca API
+  version: 0.1.0
+  description: |
+    Backend for Aalora (first tenant) on AWS. The Lovable frontend uses ONLY this contract.
+    Auth: Cognito ID token in `Authorization: Bearer <idToken>`. `/admin/*` needs group `admin`,
+    `/b2b/*` needs group `buyer`. Money is integer minor units (`*_cents`) + `currency`.
+servers:
+  - url: "{apiUrl}"
+    variables:
+      apiUrl: { default: "https://example.execute-api.us-west-2.amazonaws.com" }
+
+components:
+  securitySchemes:
+    cognito: { type: http, scheme: bearer, bearerFormat: JWT }
+  parameters:
+    sku: { name: sku, in: path, required: true, schema: { type: string, example: KJ-0001 } }
+  responses:
+    Error:
+      description: Error
+      content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+  schemas:
+    Error:
+      type: object
+      properties: { error: { type: string } }
+    Availability:
+      type: object
+      properties:
+        status: { type: string, enum: [in_stock, out_of_stock, made_to_order] }
+        quantity: { type: integer, nullable: true }
+        lead_time_days: { type: integer }
+    Attributes:
+      type: object
+      properties:
+        fabric: { type: string }
+        weave: { type: string }
+        primary_color: { type: string }
+        secondary_colors: { type: array, items: { type: string } }
+        motif: { type: string }
+        border: { type: string }
+        zari: { type: boolean }
+    PublicProduct:
+      type: object
+      properties:
+        sku: { type: string }
+        title: { type: string }
+        description: { type: string }
+        story: { type: string }
+        provenance_region: { type: string }
+        craft: { type: string }
+        attributes: { $ref: "#/components/schemas/Attributes" }
+        images: { type: array, items: { type: string, format: uri } }
+        price_cents: { type: integer }
+        currency: { type: string }
+        availability: { $ref: "#/components/schemas/Availability" }
+        tags: { type: array, items: { type: string } }
+    B2BProduct:
+      allOf:
+        - $ref: "#/components/schemas/PublicProduct"
+        - type: object
+          properties:
+            tier_prices:
+              type: array
+              items:
+                type: object
+                properties: { min_qty: { type: integer }, unit_price_cents: { type: integer }, discount_pct: { type: integer } }
+    QuoteLineIn:
+      type: object
+      required: [sku, qty]
+      properties: { sku: { type: string }, qty: { type: integer, minimum: 1, maximum: 500 } }
+    Quote:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string, enum: [requested, approved, rejected] }
+        currency: { type: string }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              sku: { type: string }
+              title: { type: string }
+              qty: { type: integer }
+              unit_price_cents: { type: integer }
+              line_total_cents: { type: integer }
+              availability: { $ref: "#/components/schemas/Availability" }
+        total_cents: { type: integer }
+        message: { type: string }
+        created_at: { type: string }
+        decided_at: { type: string, nullable: true }
+    BuyerProfile:
+      type: object
+      properties:
+        id: { type: string }
+        company: { type: string }
+        contact_name: { type: string }
+        email: { type: string }
+        country: { type: string }
+        status: { type: string, enum: [pending, approved, rejected, suspended] }
+        tier: { type: string }
+    AdminProduct:
+      type: object
+      additionalProperties: true
+      description: Full internal product (includes supplier_id, cost_cents, proposed_attributes, on_hand, listings).
+      properties:
+        sku: { type: string }
+        title: { type: string }
+        status: { type: string, enum: [draft, active, archived] }
+        price_cents: { type: integer }
+        cost_cents: { type: integer }
+        currency: { type: string }
+        supplier_id: { type: string, nullable: true }
+        attributes: { $ref: "#/components/schemas/Attributes" }
+        attribute_status: { type: string, enum: [none, pending_review, approved] }
+        proposed_attributes: { type: object, additionalProperties: true }
+        needs_review_fields: { type: array, items: { type: string } }
+        made_to_order: { type: boolean }
+        lead_time_days: { type: integer }
+        mto_capacity: { type: integer }
+        channels: { type: array, items: { type: string } }
+        on_hand: { type: integer }
+    ProductInput:
+      type: object
+      properties:
+        sku: { type: string, description: "Optional; generated from fabric prefix if omitted" }
+        fabric: { type: string }
+        title: { type: string }
+        description: { type: string }
+        story_public: { type: string }
+        provenance_region: { type: string }
+        craft: { type: string }
+        supplier_id: { type: string }
+        cost_cents: { type: integer }
+        price_cents: { type: integer }
+        currency: { type: string, default: USD }
+        margin_pct: { type: integer }
+        made_to_order: { type: boolean }
+        lead_time_days: { type: integer }
+        mto_capacity: { type: integer }
+        tags: { type: array, items: { type: string } }
+        status: { type: string, enum: [draft, active, archived] }
+    StockResult:
+      type: object
+      properties:
+        on_hand: { type: integer }
+        applied: { type: boolean }
+        event_id: { type: string, nullable: true }
+        production_order_id: { type: string, nullable: true }
+    Generic:
+      type: object
+      additionalProperties: true
+    Items:
+      type: object
+      properties: { items: { type: array, items: { type: object, additionalProperties: true } } }
+
+paths:
+  /public/products:
+    get:
+      summary: Storefront catalog (active products linked to the aalora channel)
+      parameters: [{ name: fabric, in: query, schema: { type: string } }]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, properties: { items: { type: array, items: { $ref: "#/components/schemas/PublicProduct" } } } }
+  /public/products/{sku}:
+    get:
+      summary: One storefront product
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/PublicProduct" } } } }
+        "404": { $ref: "#/components/responses/Error" }
+
+  /b2b/me:
+    get:
+      security: [{ cognito: [] }]
+      summary: My buyer profile (404 until created)
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/BuyerProfile" } } } }
+        "404": { $ref: "#/components/responses/Error" }
+    put:
+      security: [{ cognito: [] }]
+      summary: Create/update my buyer profile (status stays pending until an admin approves)
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [company], properties: { company: { type: string }, contact_name: { type: string }, country: { type: string } } }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/BuyerProfile" } } } }
+  /b2b/catalog:
+    get:
+      security: [{ cognito: [] }]
+      summary: Wholesale catalog with tier prices (approved buyers only)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, properties: { items: { type: array, items: { $ref: "#/components/schemas/B2BProduct" } } } }
+        "403": { $ref: "#/components/responses/Error" }
+  /b2b/quotes:
+    get:
+      security: [{ cognito: [] }]
+      summary: My quotes
+      responses:
+        "200":
+          description: OK
+          content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: "#/components/schemas/Quote" } } } } } }
+    post:
+      security: [{ cognito: [] }]
+      summary: Request a quote
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [lines]
+              properties:
+                lines: { type: array, items: { $ref: "#/components/schemas/QuoteLineIn" } }
+                note: { type: string }
+      responses:
+        "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/Quote" } } } }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+  /b2b/quotes/{quote_id}:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ name: quote_id, in: path, required: true, schema: { type: string } }]
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Quote" } } } }
+        "404": { $ref: "#/components/responses/Error" }
+
+  /admin/dashboard:
+    get:
+      security: [{ cognito: [] }]
+      summary: Counts for the admin home screen
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products: { type: object, additionalProperties: { type: integer } }
+                  low_stock_skus: { type: array, items: { type: string } }
+                  pending_attribute_reviews: { type: integer }
+                  pending_price_proposals: { type: integer }
+                  open_alerts: { type: integer }
+                  requested_quotes: { type: integer }
+                  pending_buyers: { type: integer }
+  /admin/products:
+    get:
+      security: [{ cognito: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [draft, active, archived] } }
+        - { name: supplier_id, in: query, schema: { type: string } }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } }
+    post:
+      security: [{ cognito: [] }]
+      requestBody: { content: { application/json: { schema: { $ref: "#/components/schemas/ProductInput" } } } }
+      responses:
+        "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/AdminProduct" } } } }
+  /admin/products/{sku}:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses:
+        "200": { description: "Product + on_hand + availability + listings + image_urls", content: { application/json: { schema: { $ref: "#/components/schemas/AdminProduct" } } } }
+    patch:
+      security: [{ cognito: [] }]
+      summary: Edit fields. price_cents only while draft; status draft|active|archived.
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody: { content: { application/json: { schema: { $ref: "#/components/schemas/ProductInput" } } } }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/AdminProduct" } } } }
+  /admin/products/{sku}/stock:
+    post:
+      security: [{ cognito: [] }]
+      summary: Adjust stock (delta + reason) or set an absolute count. Idempotent.
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [idempotency_key]
+              properties:
+                idempotency_key: { type: string, description: "uuid generated by the client per action" }
+                delta: { type: integer }
+                reason: { type: string, enum: [RECEIVE, RETURN, SALE, ADJUST, DAMAGE] }
+                count: { type: integer, description: "Use instead of delta to set an absolute count" }
+                note: { type: string }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/StockResult" } } } }
+        "409": { $ref: "#/components/responses/Error" }
+  /admin/products/{sku}/ledger:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }, { name: limit, in: query, schema: { type: integer } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/products/{sku}/reconcile:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/products/{sku}/images:
+    post:
+      security: [{ cognito: [] }]
+      summary: Get a presigned S3 PUT URL. Upload the file with PUT and the same Content-Type.
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { content_type: { type: string, enum: [image/jpeg, image/png, image/webp] } } } } }
+      responses:
+        "201":
+          description: Created
+          content: { application/json: { schema: { type: object, properties: { key: { type: string }, upload_url: { type: string }, content_type: { type: string } } } } }
+  /admin/products/{sku}/intelligence:
+    post:
+      security: [{ cognito: [] }]
+      summary: Queue AI attribute extraction from the product's images
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses: { "202": { description: Queued } }
+  /admin/products/{sku}/attributes/approve:
+    post:
+      security: [{ cognito: [] }]
+      summary: Approve proposed attributes, optionally with edits
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { edits: { $ref: "#/components/schemas/Attributes" } } } } } }
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/AdminProduct" } } } } }
+  /admin/review-queue:
+    get:
+      security: [{ cognito: [] }]
+      summary: Products with proposed attributes awaiting review (low confidence first)
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/products/{sku}/price-suggestion:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/products/{sku}/price-proposals:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody:
+        content: { application/json: { schema: { type: object, required: [price_cents], properties: { price_cents: { type: integer }, reason: { type: string } } } } }
+      responses: { "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/price-proposals:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ name: status, in: query, schema: { type: string, enum: [pending, approved, rejected, all] } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/price-proposals/{pid}/approve:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ name: pid, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/price-proposals/{pid}/reject:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ name: pid, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/comparables:
+    post:
+      security: [{ cognito: [] }]
+      summary: Add a comparable market price used by price suggestions
+      requestBody:
+        content: { application/json: { schema: { type: object, required: [fabric, price_cents], properties: { fabric: { type: string }, price_cents: { type: integer }, currency: { type: string }, note: { type: string } } } } }
+      responses: { "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/suppliers:
+    get:
+      security: [{ cognito: [] }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+    post:
+      security: [{ cognito: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, phone]
+              properties:
+                name: { type: string }
+                phone: { type: string, example: "+919845012345" }
+                language: { type: string, enum: [en, hi, mr, bn, gu, ta, te, or, as, kn] }
+                region: { type: string }
+                craft: { type: string }
+                notes: { type: string }
+      responses: { "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/suppliers/{supplier_id}:
+    patch:
+      security: [{ cognito: [] }]
+      parameters: [{ name: supplier_id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { active: { type: boolean } } } } } }
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } } }
+  /admin/products/{sku}/listings:
+    post:
+      security: [{ cognito: [] }]
+      summary: Link the product to a channel. Without `external`, the channel is searched by sku.
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [channel], properties: { channel: { type: string, enum: [aalora, shopify, etsy, meta] }, external: { type: object, additionalProperties: true } } }
+      responses:
+        "201": { description: Created, content: { application/json: { schema: { $ref: "#/components/schemas/Generic" } } } }
+        "404": { $ref: "#/components/responses/Error" }
+  /admin/products/{sku}/listings/{channel}:
+    delete:
+      security: [{ cognito: [] }]
+      parameters: [{ $ref: "#/components/parameters/sku" }, { name: channel, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: OK } }
+  /admin/products/{sku}/sync:
+    post:
+      security: [{ cognito: [] }]
+      summary: Re-push stock and price to all linked channels
+      parameters: [{ $ref: "#/components/parameters/sku" }]
+      responses: { "202": { description: Queued } }
+  /admin/alerts:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ name: status, in: query, schema: { type: string, enum: [open, resolved, all] } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/alerts/{alert_id}/resolve:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ name: alert_id, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: OK } }
+  /admin/production-orders:
+    get:
+      security: [{ cognito: [] }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/buyers:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ name: status, in: query, schema: { type: string } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/buyers/{buyer_id}/status:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ name: buyer_id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { status: { type: string, enum: [approved, rejected, pending, suspended] } } } } } }
+      responses: { "200": { description: OK } }
+  /admin/quotes:
+    get:
+      security: [{ cognito: [] }]
+      parameters: [{ name: status, in: query, schema: { type: string } }]
+      responses: { "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Items" } } } } }
+  /admin/quotes/{quote_id}/approve:
+    post:
+      security: [{ cognito: [] }]
+      summary: Approve (reserves stock). Optional per-sku price overrides, never below floor.
+      parameters: [{ name: quote_id, in: path, required: true, schema: { type: string } }]
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { price_overrides: { type: object, additionalProperties: { type: integer } }, message: { type: string } } } } }
+      responses:
+        "200": { description: OK }
+        "409": { $ref: "#/components/responses/Error" }
+  /admin/quotes/{quote_id}/reject:
+    post:
+      security: [{ cognito: [] }]
+      parameters: [{ name: quote_id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { message: { type: string } } } } } }
+      responses: { "200": { description: OK } }
+
+  /webhooks/whatsapp/{token}:
+    post:
+      summary: Twilio WhatsApp inbound (form-encoded). Not called by the frontend.
+      parameters: [{ name: token, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: TwiML }, "403": { description: Forbidden } }
+  /webhooks/shopify:
+    post:
+      summary: Shopify orders/create webhook. Not called by the frontend.
+      responses: { "200": { description: OK }, "401": { description: Bad signature } }

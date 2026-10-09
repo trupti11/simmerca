@@ -1,0 +1,4 @@
+{
+  "whatsapp": {"intent_accuracy": 0.95, "sku_accuracy": 0.97, "qty_accuracy": 0.97, "min_language_intent_accuracy": 0.85},
+  "attributes": {"fabric_accuracy": 0.85, "primary_color_accuracy": 0.80}
+}

@@ -1,0 +1,5 @@
+pytest>=8
+ruff>=0.6
+boto3>=1.35
+moto[dynamodb]>=5
+pyyaml>=6
